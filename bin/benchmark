@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path("../../Gemfile",
+  Pathname.new(__FILE__).realpath)
+
+require 'rubygems'
+require 'bundler/setup'
+
+require 'benchmark'
+require_relative '../lib/sorting'
+
+size = 5_000
+array = (1..size).map { rand(1..100).to_i }
+
+puts "#####  benchmarking sort algorithms with size of: #{size}  #####"
+Benchmark.bm do |x|
+  x.report("sort     ") { array.sort }
+  x.report("quick    ") { Sorting::Quick.sort array }
+  x.report("bubble   ") { Sorting::Bubble.sort array }
+  x.report("selection") { Sorting::Selection.sort array }
+end
